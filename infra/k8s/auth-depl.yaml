@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auth-depl
+spec: 
+  replicas: 1
+  #step 1 of 2 step process. Tell the deployment all the pods that it's going to create
+  selector:
+    matchLabels:
+      app: auth
+  #how to create each individual pod that this deployment will create
+  template:
+    metadata:
+    #matching with step 1. This is the step 2
+      labels:
+        app: auth
+    #telling the bod how to behave
+    spec:
+      containers:
+      #This name is for logging purposes
+      - name: auth
+        image: shamilrasheed/auth
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: auth-srv
+#how to behave
+spec:
+  #tell the service how to find the set of pods that is supposes to govern access to
+  selector:
+    app: auth
+  ports: 
+    - name: auth
+      protocol: TCP
+      port: 3000
+      targetPort: 3000
