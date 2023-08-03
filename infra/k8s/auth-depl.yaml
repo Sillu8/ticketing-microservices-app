@@ -20,7 +20,6 @@ spec:
       #This name is for logging purposes
       - name: auth
         image: shamilrasheed/auth
-
 ---
 apiVersion: v1
 kind: Service
