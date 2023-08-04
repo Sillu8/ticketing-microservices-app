@@ -4,14 +4,15 @@
 // So we are importing this type to make sure that we can describe the requirements or the errors that
 // are going to be assigned to our subclass.
 import { ValidationError } from 'express-validator';
+import { CustomError } from './customError';
 
 
 
-export class RequestValidationError extends Error {
+export class RequestValidationError extends CustomError {
   statusCode = 400;
   //
   constructor(public errors: ValidationError[]) {
-    super();
+    super('Invalid request!');
 
     //Only because we are extending a built-in class for ts.
     Object.setPrototypeOf(this, RequestValidationError.prototype);
