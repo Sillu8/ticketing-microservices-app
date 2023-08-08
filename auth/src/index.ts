@@ -9,6 +9,7 @@ import { signUpRouter } from './routes/signup';
 import { signOutRouter } from './routes/signout';
 import { errorHandler } from './middlewares/errorHandler';
 import { NotFoundError } from './errors/notFoundError';
+import { connectDB } from './config/db';
 
 const app = express();
 app.use(json());
@@ -25,5 +26,6 @@ app.all('*', () => {
 });
 
 app.use(errorHandler);
+connectDB()
 
-app.listen(3000, () => console.log('Auth listening at 3000!'))
+app.listen(3000, () => console.log('Auth listening at 3000!'));
