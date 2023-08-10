@@ -20,6 +20,14 @@ spec:
       #This name is for logging purposes
       - name: auth
         image: shamilrasheed/auth
+        #for env
+        env:
+          #name of the key, not the name of the secret
+          - name: JWT_KEY
+            valueFrom:
+              secretKeyRef:
+                name: jwt-secret
+                key: JWT_KEY
 ---
 apiVersion: v1
 kind: Service

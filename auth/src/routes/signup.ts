@@ -1,5 +1,5 @@
 import express, { Request, Response } from 'express';
-import { DatabaseConnectionError } from '../errors/database-conn-error';
+import jwt from 'jsonwebtoken';
 import { RequestValidationError } from '../errors/req-validation-error';
 import { body, validationResult } from 'express-validator';
 import { User } from '../models/user';
@@ -32,6 +32,21 @@ router.post('/api/users/signup', [
 
     const user = User.build({ email, password });
     await user.save();
+  
+
+    //Generate JWT
+    const userJwt = jwt.sign(
+      {
+        id: user._id,
+        email: user.email
+      }, process.env.JWT_KEY! //exclamation mark indicates that the check for the env has been already done before the start of the db connection, so we don't have to check again here right before the code.
+    );
+
+    // Store it on session object, cookie-session library will serialize it and send it to the client browser
+    // req.session.jwt = userJwt; This throws an error because ts doesn't want to assume there already exists an object.
+    req.session = {
+      jwt: userJwt //converted to json and then to base 64. First we have to decode to utf 8, get the jwt.
+    }
 
     res.status(201).send(user);
 
