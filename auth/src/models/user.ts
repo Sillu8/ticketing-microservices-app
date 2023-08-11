@@ -33,20 +33,29 @@ const userSchema = new mongoose.Schema<IUser>({
     type: String,
     required: true,
   },
+}, {//Implementation like in toJSON of objects in js, that helps to return what we want when you stringify it.
+  toJSON: {
+    transform(doc, ret) { //doc to be inserted, return value.
+      ret.id = ret._id;
+      delete ret._id;
+      delete ret.password;
+      delete ret.__v;
+    }
+  }
 })
 
 //anytime we save a doc in userSchema, this middleware will be called. 
 //mongoose doesn't know async await, so after the entire function is done, call done()
 //We will get the doc here using this.
 //If we use arrow function as callback, the doc in this will be overridden by the context of this file which is user.ts.
-userSchema.pre('save', async function(done) {
-  
-  if(this.isModified('password')){
+userSchema.pre('save', async function (done) {
+
+  if (this.isModified('password')) {
     const hashed = await Password.toHash(this.get('password'));
     this.set('password', hashed);
   }
   done();
-  
+
 })
 
 
