@@ -10,7 +10,6 @@ import { signUpRouter } from './routes/signup';
 import { signOutRouter } from './routes/signout';
 import { errorHandler } from './middlewares/errorHandler';
 import { NotFoundError } from './errors/notFoundError';
-import { connectDB } from './config/db';
 import cookieSession from 'cookie-session';
 
 const app = express();
@@ -19,7 +18,7 @@ app.use(json());
 app.use(
   cookieSession({
     signed: false,  //Disable encryption because we are passing jwt
-    secure: true    //use only for https
+    secure: process.env.NODE_ENV !== 'test'    //use only for https .. it should be false in test env, or supertest can't send cookies
   })
 )
 app.use(express.urlencoded({ extended: false, limit: '50mb' }))
