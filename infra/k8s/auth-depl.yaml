@@ -14,7 +14,7 @@ spec:
     #matching with step 1. This is the step 2
       labels:
         app: auth
-    #telling the bod how to behave
+    #telling the pod how to behave
     spec:
       containers:
       #This name is for logging purposes
@@ -35,7 +35,7 @@ metadata:
   name: auth-srv
 #how to behave
 spec:
-  #tell the service how to find the set of pods that is supposes to govern access to
+  #tell the service how to find the set of pods that is supposed to govern access to
   selector:
     app: auth
   ports: 
