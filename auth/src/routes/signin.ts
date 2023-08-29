@@ -1,10 +1,9 @@
 import express, { Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 import { body } from 'express-validator';
+import { validateRequest, BadRequestError } from '@srticketsapp/common';
 
-import { validateRequest } from '../middlewares/validateRequest';
 import { User } from '../models/user';
-import { BadRequestError } from '../errors/badRequestError';
 import { Password } from '../services/password';
 const router = express.Router();
 

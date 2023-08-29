@@ -1,15 +1,13 @@
 import express, { json } from 'express';
 import 'express-async-errors'
 import morgan from 'morgan';
-
+import { errorHandler,NotFoundError } from '@srticketsapp/common';
 
 
 import { currentUserRouter } from './routes/current-user';
 import { signInRouter } from './routes/signin';
 import { signUpRouter } from './routes/signup';
 import { signOutRouter } from './routes/signout';
-import { errorHandler } from './middlewares/errorHandler';
-import { NotFoundError } from './errors/notFoundError';
 import cookieSession from 'cookie-session';
 
 const app = express();
