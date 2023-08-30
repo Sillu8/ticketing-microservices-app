@@ -7,13 +7,13 @@ const connectDB = (async () => {
     throw new Error('JWT_KEY must be defined!')
   }
 
-  if(!process.env.MONGO_URI){
-    throw new Error('MONGO_URI must be defined!');
+  if(!process.env.MONGO_URI) {
+    throw new Error('MONGO_URI must be defined.')
   }
 
   try {
     await mongoose.connect(process.env.MONGO_URI);
-    console.log('Connected to DB!')
+    console.log('Connected to Tickets DB!')
   } catch (error) {
     console.error(error);
   }
