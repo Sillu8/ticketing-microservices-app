@@ -17,7 +17,7 @@ const connectDB = (async () => {
   } catch (error) {
     console.error(error);
   }
-  app.listen(3000, () => console.log('Auth listening at 3000!'));
+  app.listen(3000, () => console.log('Tickets listening at 3000!'));
 });
 
 connectDB();
