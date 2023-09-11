@@ -13,7 +13,7 @@ const connectDB = (async () => {
 
   try {
     await mongoose.connect(process.env.MONGO_URI);
-    console.log('Connected to DB!')
+    console.log('Auth connected to DB!')
   } catch (error) {
     console.error(error);
   }

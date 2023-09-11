@@ -13,7 +13,7 @@ const connectDB = (async () => {
 
   try {
     await mongoose.connect(process.env.MONGO_URI);
-    console.log('Connected to Tickets DB!')
+    console.log('Tickets connected to  DB!')
   } catch (error) {
     console.error(error);
   }
