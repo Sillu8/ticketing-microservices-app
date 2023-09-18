@@ -1,7 +1,10 @@
 import { requireAuth, validateRequest } from '@srticketsapp/common';
 import { body } from 'express-validator';
-import { Router, Request, Response, NextFunction } from 'express';
+import { Router, Request, Response } from 'express';
 import { Ticket } from '../models/ticket';
+import { TicketCreatedPublisher } from '../events/publishers/ticket-created-publisher';
+import { natsWrapper } from '../nats-wrapper';
+
 
 const router = Router();
 
@@ -29,7 +32,15 @@ router.post('/api/tickets',
 
     await ticket.save();
 
+    // We add ticket because we can't be sure if the data that came in the req.body was updated in the db.
+    await new TicketCreatedPublisher(natsWrapper.client).publish({
+      id: ticket.id,
+      title: ticket.title, 
+      price: ticket.price,
+      userId: ticket.userId,
+    })
+
     res.status(201).send(ticket);
   });
 
-export { router as createTicketRouter }
+export { router as createTicketRouter } 
