@@ -2,6 +2,7 @@ import mongoose from 'mongoose';
 import { Order, OrderStatus } from './order';
 
 interface TicketAttrs {
+  id: string; // The id come as 'id' from order service cause of using toJSON, but we have to save it as _id in db or mongodb will create new id. so alter build method.
   title: string;
   price: number;
 }
@@ -38,7 +39,11 @@ const ticketSchema = new mongoose.Schema({
 });
 
 ticketSchema.statics.build = (attrs: TicketAttrs) => {
-  return new Ticket(attrs);
+  return new Ticket({
+    _id: attrs.id, 
+    title: attrs.title,
+    price: attrs.price,
+  });
 };
 
 // Check all orders. Find if an order has the given ticket and status is not cancelled.
