@@ -3,6 +3,7 @@ import { app } from '../../app';
 import mongoose from 'mongoose';
 import { signin } from '../../test/setup';
 import { natsWrapper } from '../../nats-wrapper';
+import { Ticket } from '../../models/ticket';
 
 const title = 'Coldplay';
 const price = 20;
@@ -91,7 +92,7 @@ it('updates the ticket if valid inputs are provided', async () => {
       title, price
     })
 
-    await request(app)
+  await request(app)
     .put(`/api/tickets/${res.body.id}`)
     .set('Cookie', cookie)
     .send({
@@ -101,8 +102,8 @@ it('updates the ticket if valid inputs are provided', async () => {
     .expect(200);
 
   const ticketRes = await request(app)
-  .get(`/api/tickets/${res.body.id}`)
-  .send();
+    .get(`/api/tickets/${res.body.id}`)
+    .send();
 
   expect(ticketRes.body.title).toEqual('New title')
   expect(ticketRes.body.price).toEqual(100)
@@ -119,7 +120,7 @@ it('publishes an event', async () => {
       title, price
     })
 
-    await request(app)
+  await request(app)
     .put(`/api/tickets/${res.body.id}`)
     .set('Cookie', cookie)
     .send({
@@ -130,3 +131,32 @@ it('publishes an event', async () => {
 
   expect(natsWrapper.client.publish).toHaveBeenCalled();
 })
+
+
+it('rejects to edit ticket if ticket is reserved', async () => {
+  const cookie = signin();
+
+  const res = await request(app)
+    .post(`/api/tickets`)
+    .set('Cookie', cookie)
+    .send({
+      title, price
+    })
+
+  const ticket = await Ticket.findById(res.body.id);
+  const orderId = new mongoose.Types.ObjectId().toHexString()
+  ticket!.set({ orderId });
+  await ticket!.save();
+
+  await request(app)
+    .put(`/api/tickets/${res.body.id}`)
+    .set('Cookie', cookie)
+    .send({
+      title: 'New title',
+      price: 100
+    })
+    .expect(400);
+
+  expect(natsWrapper.client.publish).toHaveBeenCalled();
+})
+
