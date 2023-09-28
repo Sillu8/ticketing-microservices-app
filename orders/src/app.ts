@@ -27,11 +27,11 @@ app.use(morgan('dev'));
 
 app.use(currentUser);
 
-app.use((req,res,next)=>{console.log(req.currentUser); next()});
+
+app.use(deleteOrderRouter);
+app.use(indexOrderRouter);
 app.use(newOrderRouter);
 app.use(showOrderRouter);
-app.use(indexOrderRouter);
-app.use(deleteOrderRouter);
 
 
 app.all('*', () => {
