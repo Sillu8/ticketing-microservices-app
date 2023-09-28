@@ -33,7 +33,7 @@ const ticketSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  orderId: {
+  orderId: { // won't allow to edit if exists
     type: String,
   }
 }, {

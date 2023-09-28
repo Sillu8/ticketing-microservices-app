@@ -21,14 +21,17 @@ app.use(
     secure: process.env.NODE_ENV !== 'test'    //use only for https .. it should be false in test env, or supertest can't send cookies
   })
 )
-app.use(currentUser);
+
 app.use(express.urlencoded({ extended: false, limit: '50mb' }))
 app.use(morgan('dev'));
 
-app.use(deleteOrderRouter);
-app.use(indexOrderRouter);
+app.use(currentUser);
+
+app.use((req,res,next)=>{console.log(req.currentUser); next()});
 app.use(newOrderRouter);
 app.use(showOrderRouter);
+app.use(indexOrderRouter);
+app.use(deleteOrderRouter);
 
 
 app.all('*', () => {

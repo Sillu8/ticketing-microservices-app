@@ -24,6 +24,8 @@ app.use(currentUser);
 app.use(express.urlencoded({ extended: false, limit: '50mb' }))
 app.use(morgan('dev'));
 
+app.use((req,res,next)=>{console.log(req.currentUser); next()});
+
 app.use(createTicketRouter);
 app.use(showTicketRouter);
 app.use(indexTicketRouter);
