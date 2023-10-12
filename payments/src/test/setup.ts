@@ -5,6 +5,8 @@ import jwt from 'jsonwebtoken';
 
 jest.mock('../nats-wrapper')
 
+process.env.STRIPE_KEY = 'sk_test_51NyclZSJ7MPhHjINBV7aKkKnWQ1YkQF0LOyWDTracDbpOjCo2XRCsZjouRm8meeoHQkJLduY3fuZJzpHs7AVKaaH00b50y9Cbm';
+
 let mongo: any;
 beforeAll(async () => {
   process.env.JWT_KEY = 'asdfasdf';
@@ -34,11 +36,12 @@ afterAll(async () => {
 
 
 
-
-export const signin = () => {
+// Optional argument id
+export const signin = (id?: string) => {
   //Build a JWT payload. {id, email}
   const payload = {
-    id: new mongoose.Types.ObjectId().toHexString(),
+    // If optional id is not present, then create new. 
+    id: id || new mongoose.Types.ObjectId().toHexString(),
     email: 'test@test.com'
   };
 

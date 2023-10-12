@@ -11,6 +11,14 @@ const connectDB = (async () => {
     throw new Error('JWT_KEY must be defined!')
   }
 
+  if(!process.env.RAZORPAY_ID) {
+    throw new Error('RAZORPAY_ID must be defined!')
+  }
+
+  if(!process.env.RAZORPAY_SECRET) {
+    throw new Error('RAZORPAY_SECRET must be defined!')
+  }
+
   if(!process.env.MONGO_URI) {
     throw new Error('MONGO_URI must be defined!')
   }
@@ -42,11 +50,11 @@ const connectDB = (async () => {
     new OrderCreatedListener(natsWrapper.client).listen();
 
     await mongoose.connect(process.env.MONGO_URI);
-    console.log('Tickets connected to  DB!')
+    console.log('Payments connected to  DB!')
   } catch (error) {
     console.error(error);
   }
-  app.listen(3000, () => console.log('Tickets listening at 3000!'));
+  app.listen(3000, () => console.log('Payments listening at 3000!'));
 });
 
 connectDB();

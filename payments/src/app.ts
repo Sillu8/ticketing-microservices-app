@@ -6,6 +6,7 @@ import { currentUser, errorHandler,NotFoundError } from '@srticketsapp/common';
 
 
 import cookieSession from 'cookie-session';
+import { createChargeRouter } from './routes/new';
 
 
 const app = express();
@@ -21,6 +22,7 @@ app.use(currentUser);
 app.use(express.urlencoded({ extended: false, limit: '50mb' }))
 app.use(morgan('dev'));
 
+app.use(createChargeRouter);
 
 app.all('*', () => {
   throw new NotFoundError();
